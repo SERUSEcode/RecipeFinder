@@ -1,20 +1,44 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 interface SearchBarProps {
-  value: string
-  onChange: (value: string) => void
+  onSearch: (query: string) => void
 }
 
-export function SearchBar({ value, onChange }: SearchBarProps) {
+export function SearchBar({ onSearch }: SearchBarProps) {
+  const [value, setValue] = useState('')
+
+  useEffect(() => {
+    const trimmed = value.trim()
+
+    // Empty = reset to start/category mode
+    if (!trimmed) {
+      onSearch('')
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      onSearch(trimmed)
+    }, 400)
+
+    return () => clearTimeout(timeout)
+  }, [value, onSearch])
+
   return (
-    <div className="mb-6">
-      <input
-        type="text"
-        placeholder="Search recipes…"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
+    <div className="max-w-3xl mx-auto mb-6">
+      <div className="relative">
+        <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Search recipes by name..."
+          className="w-full rounded-xl border px-12 py-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+        />
+
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+          🔍
+        </span>
+      </div>
     </div>
   )
 }

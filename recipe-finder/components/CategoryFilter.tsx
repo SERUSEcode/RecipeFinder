@@ -1,5 +1,7 @@
-interface CategoryFilterProps {
-  categories: { strCategory: string }[]
+import { Category } from '@/lib/types'
+
+interface Props {
+  categories: Category[]
   selectedCategory: string | null
   onSelect: (category: string | null) => void
 }
@@ -8,31 +10,48 @@ export function CategoryFilter({
   categories,
   selectedCategory,
   onSelect,
-}: CategoryFilterProps) {
+}: Props) {
   return (
-    <div className="mb-6 flex flex-wrap gap-2">
-      <button
+    <div className="flex flex-wrap justify-center gap-3 mb-10">
+      <CategoryButton
+        active={!selectedCategory}
         onClick={() => onSelect(null)}
-        className={`px-3 py-1 rounded border ${
-          !selectedCategory ? 'bg-black text-white' : ''
-        }`}
       >
         All
-      </button>
+      </CategoryButton>
 
       {categories.map((cat) => (
-        <button
+        <CategoryButton
           key={cat.strCategory}
+          active={selectedCategory === cat.strCategory}
           onClick={() => onSelect(cat.strCategory)}
-          className={`px-3 py-1 rounded border ${
-            selectedCategory === cat.strCategory
-              ? 'bg-black text-white'
-              : ''
-          }`}
         >
           {cat.strCategory}
-        </button>
+        </CategoryButton>
       ))}
     </div>
+  )
+}
+
+function CategoryButton({
+  active,
+  children,
+  onClick,
+}: {
+  active: boolean
+  children: React.ReactNode
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-5 py-2 rounded-full border transition ${
+        active
+          ? 'bg-orange-500 text-white border-orange-500'
+          : 'bg-white hover:bg-orange-50'
+      }`}
+    >
+      {children}
+    </button>
   )
 }
