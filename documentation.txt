@@ -1,0 +1,6 @@
+
+
+Search bar:
+
+User types → SearchBar (debounce) → onSearch(query)
+→ useMeals → API fetch

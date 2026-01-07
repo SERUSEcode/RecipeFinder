@@ -19,21 +19,23 @@ const DEFAULT_MEAL_IDS = [
 
 export function useMeals() {
   const [meals, setMeals] = useState<Meal[]>([])
+  const [startMeals, setStartMeals] = useState<Meal[]>([])
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  // Initial load
+  // Load start meals and categories once
   useEffect(() => {
     async function init() {
       try {
-        setLoading(true)
         const [initialMeals, categoryList] = await Promise.all([
           fetchMealsByIds(DEFAULT_MEAL_IDS),
           fetchCategories(),
         ])
+
+        // Start meals are the baseline state
         setMeals(initialMeals)
+        setStartMeals(initialMeals)
         setCategories(categoryList)
       } catch {
         setError('Failed to load meals')
@@ -45,24 +47,19 @@ export function useMeals() {
     init()
   }, [])
 
+  // Search overrides meals; empty query restores baseline
   async function search(query: string) {
+    if (!query) {
+      setMeals(startMeals)
+      return
+    }
+
     try {
-      setLoading(true)
       setError(null)
-
       const results = await searchMeals(query)
-
-      const filtered = selectedCategory
-        ? results.filter(
-            (meal) => meal.strCategory === selectedCategory
-          )
-        : results
-
-      setMeals(filtered)
+      setMeals(results)
     } catch {
       setError('Failed to search meals')
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -71,8 +68,6 @@ export function useMeals() {
     categories,
     loading,
     error,
-    selectedCategory,
-    setSelectedCategory,
     search,
   }
 }

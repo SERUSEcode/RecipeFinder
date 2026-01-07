@@ -1,26 +1,25 @@
 'use client'
 
 import { useMeals } from '@/hooks/useMeals'
+import { SearchBar } from '@/components/SearchBar'
 
 export default function Home() {
   const {
     meals,
-    categories,
     loading,
     error,
     search,
-    selectedCategory,
-    setSelectedCategory,
   } = useMeals()
 
   return (
     <main className="min-h-screen p-6">
       <h1 className="text-2xl font-bold mb-4">Recipe Finder</h1>
 
+      <SearchBar onSearch={search} />
+
       {loading && <p>Loading…</p>}
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* Temporary render (will extract next) */}
       {!loading && !error && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {meals.map((meal) => (
