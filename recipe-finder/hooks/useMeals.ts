@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Meal, Category } from '@/lib/types'
 import {
-  searchMeals,
-  fetchCategories,
   fetchMealsByIds,
+  fetchCategories,
+  searchMeals,
+  fetchMealsByCategory,
 } from '@/lib/api'
+
+type Mode = 'start' | 'search' | 'category'
 
 const DEFAULT_MEAL_IDS = [
   '52771',
@@ -24,7 +27,11 @@ export function useMeals() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Load start meals and categories once
+  const [mode, setMode] = useState<Mode>('start')
+  const [query, setQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  // Initial load
   useEffect(() => {
     async function init() {
       try {
@@ -33,7 +40,6 @@ export function useMeals() {
           fetchCategories(),
         ])
 
-        // Start meals are the baseline state
         setMeals(initialMeals)
         setStartMeals(initialMeals)
         setCategories(categoryList)
@@ -47,20 +53,60 @@ export function useMeals() {
     init()
   }, [])
 
-  // Search overrides meals; empty query restores baseline
-  async function search(query: string) {
-    if (!query) {
-      setMeals(startMeals)
+  // Single source of fetching truth
+  useEffect(() => {
+    if (loading) return
+
+    async function fetchByMode() {
+      try {
+        setError(null)
+
+        if (mode === 'start') {
+          setMeals(startMeals)
+        }
+
+        if (mode === 'search') {
+          const results = await searchMeals(query)
+          setMeals(results)
+        }
+
+        if (mode === 'category' && selectedCategory) {
+          const results = await fetchMealsByCategory(selectedCategory)
+          setMeals(results)
+        }
+      } catch {
+        setError('Failed to load meals')
+      }
+    }
+
+    fetchByMode()
+  }, [mode, query, selectedCategory, startMeals, loading])
+
+  // UI actions (no async here)
+
+  function onSearchChange(value: string) {
+    if (!value) {
+      setQuery('')
+      setMode('start')
       return
     }
 
-    try {
-      setError(null)
-      const results = await searchMeals(query)
-      setMeals(results)
-    } catch {
-      setError('Failed to search meals')
+    setQuery(value)
+    setSelectedCategory(null)
+    setMode('search')
+  }
+
+  function onCategorySelect(category: string | null) {
+    setQuery('')
+
+    if (!category) {
+      setSelectedCategory(null)
+      setMode('start')
+      return
     }
+
+    setSelectedCategory(category)
+    setMode('category')
   }
 
   return {
@@ -68,6 +114,9 @@ export function useMeals() {
     categories,
     loading,
     error,
-    search,
+    query,
+    selectedCategory,
+    onSearchChange,
+    onCategorySelect,
   }
 }
