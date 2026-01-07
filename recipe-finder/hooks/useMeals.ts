@@ -31,6 +31,7 @@ export function useMeals() {
   const [query, setQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
+  
   // Initial load
   useEffect(() => {
     async function init() {
@@ -84,30 +85,31 @@ export function useMeals() {
 
   // UI actions (no async here)
 
-  function onSearchChange(value: string) {
+  async function onSearchChange(value: string) {
+    setQuery(value)
+    setSelectedCategory(null) // 👈 reset category
+
     if (!value) {
-      setQuery('')
-      setMode('start')
-      return
+        setMeals(startMeals)
+        return
     }
 
-    setQuery(value)
-    setSelectedCategory(null)
-    setMode('search')
+    const results = await searchMeals(value)
+    setMeals(results)
   }
 
-  function onCategorySelect(category: string | null) {
-    setQuery('')
+  async function onCategorySelect(category: string | null) {
+    setSelectedCategory(category)
+    setQuery('') // 👈 reset search
 
     if (!category) {
-      setSelectedCategory(null)
-      setMode('start')
-      return
+        setMeals(startMeals)
+        return
     }
 
-    setSelectedCategory(category)
-    setMode('category')
-  }
+    const results = await fetchMealsByCategory(category)
+    setMeals(results)
+}
 
   return {
     meals,
