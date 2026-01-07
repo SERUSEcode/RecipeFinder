@@ -46,3 +46,16 @@ export async function fetchMealsByIds(ids: string[]): Promise<Meal[]> {
 
   return results.filter((meal): meal is Meal => meal !== null)
 }
+
+export async function fetchMealsByCategory(category: string): Promise<Meal[]> {
+  const res = await fetch(`${BASE_URL}/filter.php?c=${category}`)
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch meals by category')
+  }
+
+  const data = await res.json()
+
+  // filter.php returns fewer fields; normalize shape if needed
+  return data.meals ?? []
+}

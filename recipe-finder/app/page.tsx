@@ -2,20 +2,31 @@
 
 import { useMeals } from '@/hooks/useMeals'
 import { SearchBar } from '@/components/SearchBar'
+import { CategoryFilter } from '@/components/CategoryFilter'
 
 export default function Home() {
   const {
     meals,
+    categories,
     loading,
     error,
-    search,
+    query,
+    selectedCategory,
+    onSearchChange,
+    onCategorySelect,
   } = useMeals()
 
   return (
     <main className="min-h-screen p-6">
       <h1 className="text-2xl font-bold mb-4">Recipe Finder</h1>
 
-      <SearchBar onSearch={search} />
+      <SearchBar value={query} onChange={onSearchChange} />
+
+      <CategoryFilter
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onSelect={onCategorySelect}
+      />
 
       {loading && <p>Loading…</p>}
       {error && <p className="text-red-500">{error}</p>}
