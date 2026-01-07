@@ -4,9 +4,17 @@ interface Props {
   meal: Meal
   onView: (id: string) => void
   category?: string | null
+  isFavorite: boolean
+  onToggleFavorite: (meal: Meal) => void
 }
 
-export function RecipeCard({ meal, onView, category }: Props) {
+export function RecipeCard({
+  meal,
+  onView,
+  category,
+  isFavorite,
+  onToggleFavorite,
+}: Props) {
   return (
     <div className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
       <div className="relative">
@@ -17,24 +25,17 @@ export function RecipeCard({ meal, onView, category }: Props) {
         />
 
         {/* Category badge */}
-        <span className="
-          absolute top-3 left-3
-          bg-orange-500 text-white
-          text-xs font-medium
-          px-3 py-1
-          rounded-full
-          shadow
-          ">
+        <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-3 py-1 rounded-full shadow">
           {meal.strCategory || category}
         </span>
 
-
-        {/* Heart */}
+        {/* Favorite */}
         <button
+          onClick={() => onToggleFavorite(meal)}
           className="absolute top-3 right-3 bg-white/90 rounded-full h-8 w-8 flex items-center justify-center shadow"
           aria-label="Favorite"
         >
-          ❤️
+          {isFavorite ? '❤️' : '🤍'}
         </button>
       </div>
 
