@@ -13,10 +13,11 @@ export default function Home() {
   const {
     meals,
     categories,
+    query,
+    selectedCategory,
     loading,
     error,
     onSearchChange,
-    selectedCategory,
     onCategorySelect,
   } = useMeals()
 
@@ -26,13 +27,17 @@ export default function Home() {
     <main className="min-h-screen bg-orange-50">
       <Header />
 
-      <SearchBar onSearch={onSearchChange} />
+      <SearchBar
+        value={query}
+        onChange={onSearchChange}
+      />
 
       <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}
         onSelect={onCategorySelect}
       />
+
 
       <section className="max-w-7xl mx-auto px-6 pb-12">
         {!loading && !error && (
@@ -48,6 +53,7 @@ export default function Home() {
           <RecipeGrid
             meals={meals}
             onView={setSelectedMealId}
+            category={selectedCategory}
           />
         )}
       </section>
