@@ -1,8 +1,11 @@
 'use client'
+// Built with AI assistance - ChatGPT
 
 import { useMeals } from '@/hooks/useMeals'
+import { Header } from '@/components/Header'
 import { SearchBar } from '@/components/SearchBar'
 import { CategoryFilter } from '@/components/CategoryFilter'
+import { RecipeCard } from '@/components/RecipeCard'
 
 export default function Home() {
   const {
@@ -10,17 +13,17 @@ export default function Home() {
     categories,
     loading,
     error,
-    query,
-    selectedCategory,
     onSearchChange,
+    selectedCategory,
     onCategorySelect,
+    
   } = useMeals()
 
   return (
-    <main className="min-h-screen p-6">
-      <h1 className="text-2xl font-bold mb-4">Recipe Finder</h1>
+    <main className="min-h-screen bg-orange-50">
+      <Header />
 
-      <SearchBar value={query} onChange={onSearchChange} />
+      <SearchBar onSearch={onSearchChange} />
 
       <CategoryFilter
         categories={categories}
@@ -28,29 +31,20 @@ export default function Home() {
         onSelect={onCategorySelect}
       />
 
-      {loading && <p>Loading…</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      <section className="max-w-7xl mx-auto px-6">
+        <p className="mb-6 text-gray-600">
+          {meals.length} recipes found
+        </p>
 
-      {!loading && !error && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {loading && <p>Loading…</p>}
+        {error && <p className="text-red-500">{error}</p>}
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {meals.map((meal) => (
-            <div
-              key={meal.idMeal}
-              className="border rounded p-2 text-sm"
-            >
-              <img
-                src={meal.strMealThumb}
-                alt={meal.strMeal}
-                className="w-full rounded mb-2"
-              />
-              <p className="font-medium">{meal.strMeal}</p>
-              <p className="text-gray-500">
-                {meal.strCategory}
-              </p>
-            </div>
+            <RecipeCard key={meal.idMeal} meal={meal} />
           ))}
         </div>
-      )}
+      </section>
     </main>
   )
 }
