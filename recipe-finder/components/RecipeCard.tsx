@@ -16,7 +16,11 @@ export function RecipeCard({
   onToggleFavorite,
 }: Props) {
   return (
-    <div className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+    <div className="
+      bg-white rounded-xl shadow
+      transition-transform duration-200
+      hover:-translate-y-1 hover:shadow-lg
+    ">
       <div className="relative">
         <img
           src={meal.strMealThumb}
@@ -32,7 +36,7 @@ export function RecipeCard({
         {/* Favorite */}
         <button
           onClick={() => onToggleFavorite(meal)}
-          className="absolute top-3 right-3 bg-white/90 rounded-full h-8 w-8 flex items-center justify-center shadow"
+          className="absolute top-3 right-3 bg-white/90 rounded-full h-8 w-8 flex items-center justify-center shadow transition-transform active:scale-90"
           aria-label="Favorite"
         >
           {isFavorite ? '❤️' : '🤍'}
