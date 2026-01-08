@@ -1,3 +1,5 @@
+// Handels the search bar component for searching recipes
+
 interface SearchBarProps {
   value: string
   onChange: (value: string) => void

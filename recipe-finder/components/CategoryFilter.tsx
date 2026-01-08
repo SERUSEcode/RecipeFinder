@@ -1,3 +1,5 @@
+// Handels the category filter buttons and category filtering logic
+
 import { Category } from '@/lib/types'
 
 interface Props {

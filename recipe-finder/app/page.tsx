@@ -1,9 +1,13 @@
 'use client'
 
+// React
 import { useState } from 'react'
+
+// Hooks
 import { useMeals } from '@/hooks/useMeals'
 import { useFavorites } from '@/hooks/useFavorites'
 
+// Components
 import { Header } from '@/components/Header'
 import { SearchBar } from '@/components/SearchBar'
 import { CategoryFilter } from '@/components/CategoryFilter'
@@ -11,6 +15,7 @@ import { RecipeGrid } from '@/components/RecipeGrid'
 import { RecipeDetailOverlay } from '@/components/RecipeDetailOverlay'
 
 export default function Home() {
+  // Domain state (meals, categories, search, filter)
   const {
     meals,
     categories,
@@ -22,21 +27,24 @@ export default function Home() {
     onCategorySelect,
   } = useMeals()
 
+  // Favorites state
   const {
     favorites,
     isFavorite,
     toggleFavorite,
   } = useFavorites()
 
+  // UI state
   const [selectedMealId, setSelectedMealId] = useState<string | null>(null)
   const [showFavorites, setShowFavorites] = useState(false)
 
+  // Determine which meals to show
   const visibleMeals = showFavorites
     ? favorites
     : meals
 
   return (
-    <main className="min-h-screen bg-orange-50">
+    <main className="min-h-screen bg-orange-50 text-black">
       <Header />
 
       {/* Search + Category */}

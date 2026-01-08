@@ -1,3 +1,5 @@
+// Handels the grid layout for displaying recipe cards
+
 import { Meal } from '@/lib/types'
 import { RecipeCard } from './RecipeCard'
 

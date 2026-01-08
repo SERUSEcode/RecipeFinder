@@ -1,3 +1,5 @@
+// Handels the meals fetching and filtering logic
+
 import { useEffect, useState } from 'react'
 import { Meal, Category } from '@/lib/types'
 import {
@@ -85,31 +87,17 @@ export function useMeals() {
 
   // UI actions (no async here)
 
-  async function onSearchChange(value: string) {
+  function onSearchChange(value: string) {
     setQuery(value)
-    setSelectedCategory(null) // 👈 reset category
-
-    if (!value) {
-        setMeals(startMeals)
-        return
-    }
-
-    const results = await searchMeals(value)
-    setMeals(results)
+    setSelectedCategory(null)
+    setMode(value ? 'search' : 'start')
   }
 
-  async function onCategorySelect(category: string | null) {
+  function onCategorySelect(category: string | null) {
     setSelectedCategory(category)
-    setQuery('') // 👈 reset search
-
-    if (!category) {
-        setMeals(startMeals)
-        return
-    }
-
-    const results = await fetchMealsByCategory(category)
-    setMeals(results)
-}
+    setQuery('')
+    setMode(category ? 'category' : 'start')
+  }
 
   return {
     meals,

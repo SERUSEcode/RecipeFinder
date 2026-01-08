@@ -1,3 +1,5 @@
+// Handels the overlay that shows detailed recipe information
+
 import { useEffect, useState } from 'react'
 import { Meal } from '@/lib/types'
 import { fetchMealById } from '@/lib/api'
