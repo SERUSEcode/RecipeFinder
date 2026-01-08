@@ -1,3 +1,5 @@
+// Handels the general overlay component with backdrop and animation
+
 import { ReactNode, useEffect, useState } from 'react'
 
 interface OverlayProps {

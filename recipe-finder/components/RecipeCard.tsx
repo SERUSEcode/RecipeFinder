@@ -1,3 +1,5 @@
+// Handels the cards for each recipe in the list
+
 import { Meal } from '@/lib/types'
 
 interface Props {

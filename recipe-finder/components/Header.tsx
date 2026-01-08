@@ -1,3 +1,5 @@
+// Handels the header component with title and subtitle
+
 export function Header() {
   return (
     <header className="text-center py-10">

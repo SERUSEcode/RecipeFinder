@@ -1,3 +1,5 @@
+// Handels the favorites logic and state management
+
 import { useEffect, useState } from 'react'
 import { Meal } from '@/lib/types'
 import { fetchMealById } from '@/lib/api'
